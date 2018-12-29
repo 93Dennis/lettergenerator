@@ -4,7 +4,7 @@
     <v-container>
       <h1 class="grey--text text--darken-2">Impressum</h1>
       <v-layout row wrap>
-        <v-flex xs12 sm3>
+        <v-flex xs12 sm2>
           <h4>Angaben gem. § 5 TMG:</h4>
           <p>
             Dennis Przytarski<br>
@@ -12,7 +12,7 @@
             24116 Kiel
           </p>
         </v-flex> 
-        <v-flex xs12 sm3>
+        <v-flex xs12 sm2>
           <h4>Kontakt</h4>
           <p>
             <a href="mailto:dennis.przytarski@gmx.de">

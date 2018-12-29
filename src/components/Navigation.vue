@@ -38,18 +38,18 @@
         ></v-toolbar-side-icon>
         
         <v-list v-if="extended" slot="extension" dark class="grey darken-3 py-0">
-        <v-list-tile router :to="navLinks.home.path">
-          <v-list-tile-content>
-            <v-list-tile-title>{{ navLinks.home.name }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-divider dark></v-divider>
-        <v-list-tile router :to="navLinks.impressum.path">
-          <v-list-tile-content>
-            <v-list-tile-title>{{ navLinks.impressum.name }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
+          <v-list-tile router :to="navLinks.home.path">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ navLinks.home.name }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider dark></v-divider>
+          <v-list-tile router :to="navLinks.impressum.path">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ navLinks.impressum.name }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
       </v-toolbar>
 
       
