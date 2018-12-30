@@ -1,24 +1,22 @@
 <template>
-  <v-app class="grey lighten-5">
+  <v-app class="grey lighten-2">
     <app-nav/>
     <v-content class="mx-1 my-2">
       <router-view/>
     </v-content>
+    <app-footer/>
   </v-app>
 </template>
 
 <script>
 import Navigation from '@/components/Navigation.vue'
+import Footer from '@/components/Footer.vue'
 
 export default {
   name: 'App',
   components: {
-    appNav: Navigation
-  },
-  data () {
-    return {
-      // 
-    }
+    appNav: Navigation,
+    appFooter: Footer
   }
 }
 </script>
