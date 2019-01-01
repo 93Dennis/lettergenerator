@@ -92,7 +92,7 @@ export default {
     },
     async onEditSubmit(letter) {
       try {
-        const response = await db.collection('letters').doc(this.id).set(letter); 
+        await db.collection('letters').doc(this.id).set(letter); 
         this.isEditing = false;
         this.showSuccessAlert = true;
         this.$scrollTo('#top', 300);

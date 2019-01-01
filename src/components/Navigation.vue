@@ -35,7 +35,9 @@
           dark 
           @click="extended = !extended"
           class="hidden-md-and-up"  
-        ></v-toolbar-side-icon>
+        >
+          <v-icon v-if="extended">close</v-icon>
+        </v-toolbar-side-icon>
         
         <v-list v-if="extended" slot="extension" dark class="grey darken-3 py-0">
           <v-list-tile router :to="navLinks.home.path">

@@ -1,5 +1,5 @@
 <template>
-  <v-app class="grey lighten-2">
+  <v-app class="grey lighten-3">
     <app-nav/>
     <v-content class="mx-1 my-2">
       <router-view/>
@@ -10,7 +10,7 @@
 
 <script>
 import Navigation from '@/components/Navigation.vue'
-import Footer from '@/components/Footer.vue'
+import Footer from '@/components/Footer.vue' 
 
 export default {
   name: 'App',

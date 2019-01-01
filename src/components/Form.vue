@@ -128,7 +128,6 @@ export default {
     if (this.lData !== undefined) {
       this.letter = this.lData;
     }
-    console.log(this.lData);
   }
 }
 </script>

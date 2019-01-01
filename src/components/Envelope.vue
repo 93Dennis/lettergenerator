@@ -1,13 +1,23 @@
 <template>
-  <div class="letter-image">
+  <div class="envelope">
     <img :src="backgroundPath" alt="Brief" width="100%">
-    <div class="place-date" v-if="letter.place != '' && letter.date != ''">{{ letter.place }}, den {{ letter.date | convertDate }}</div>
-    <div class="content">{{ letter.content }}</div>
+    <div class="sender" v-if="letter.sender">
+      {{ letter.sender.name }}<br>
+      {{ letter.sender.street }}<br>
+      {{ letter.sender.place }}<br>
+      {{ letter.sender.country }}<br>
+      </div>
+    <div class="recipient" v-if="letter.recipient">
+      {{ letter.recipient.name }}<br>
+      {{ letter.recipient.street }}<br>
+      {{ letter.recipient.place }}<br>
+      {{ letter.recipient.country }}<br>
+    </div>
   </div>
 </template>
 
 <script>
-import bg from '@/assets/images/letter-background.jpg';
+import bg from '@/assets/images/old_air_mail.png';
 
 export default {
   data() {
@@ -15,83 +25,73 @@ export default {
       backgroundPath: bg
     }
   },
-  props: ['letter'],
-  filters: {
-    convertDate(value) {
-      let oldDate = new Date(value);
-      let day = oldDate.getDay();
-      let month = oldDate.getMonth();
-      let year = oldDate.getFullYear() + 1;
-      let newDate = day + '.' + month + '.' + year;
-      return newDate;
-     /*  return value.toLocaleString('de-DE'); */
-    }
-  }
+  props: ['letter']
 }
 </script>
 
 <style>
-  .letter-image {
-      position: relative;
-      text-align: left;
-      color: rgb(7, 8, 87);
-      font-family: 'Dancing Script', cursive;
-      white-space: pre-wrap;
-      line-height: 150%;
-      -webkit-filter: drop-shadow(2px 2px 2px #222);
-      filter: drop-shadow(2px 2px 2px #222);
-    }
-  
+  .envelope {
+    position: relative;
+    text-align: left;
+    color: rgb(7, 8, 87);
+    font-family: 'Dancing Script', cursive;
+    white-space: pre-wrap;
+    line-height: 100%;
+    cursor: pointer;
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(5px 5px 5px #222);
+  }
+
   @media screen and (max-width: 499px) {
-    .letter-image {
+    .envelope {
       font-size: 0.5em;
     }
   } 
   
   @media screen and (min-width: 500px) and (max-width: 599px) {
-    .letter-image {
+    .envelope {
       font-size: 0.7em;
     }
   } 
 
   @media screen and (min-width: 600px) and (max-width: 679px) {
-    .letter-image {
+    .envelope {
       font-size: 0.8em;
     }
   } 
   
   @media screen and (min-width: 680px) and (max-width: 749px) {
-    .letter-image {
+    .envelope {
       font-size: 0.9em;
     }
   } 
 
     @media screen and (min-width: 750px) and (max-width: 799px) {
-    .letter-image {
+    .envelope {
       font-size: 1em;
     }
   } 
 
   @media screen and (min-width: 800px) and (max-width: 889px) {
-    .letter-image {
+    .envelope {
       font-size: 1.1em;
     }
   } 
   
   @media screen and (min-width: 890px) and (max-width: 959px) {
-    .letter-image {
+    .envelope {
       font-size: 1.2em;
     }
   } 
 
   @media screen and (min-width: 960px) and (max-width: 1263px) {
-    .letter-image {
+    .envelope {
       font-size: 1.25em;
     }
   } 
 
   @media screen and (min-width: 1264px) and (max-width: 1904px) {
-    .letter-image {
+    .envelope {
       font-size: 1.2em;
     }
   } 
@@ -102,16 +102,17 @@ export default {
     }
   } 
 
-  .place-date {
+  .sender {
+    font-size: 1.2em;
     position: absolute;
-    top: 5%;
-    right: 12%;
-  }
-  .content {
-    position: absolute;
-    top: 10%;
+    top: 12%;
     left: 10%;
-    width: 80%;
+  }
+  .recipient {
+    font-size: 1.5em;
+    position: absolute;
+    bottom: 20%;
+    right: 18%;
   }
 </style>
 
