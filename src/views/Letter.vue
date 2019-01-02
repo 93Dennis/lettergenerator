@@ -1,12 +1,12 @@
 <template>
-  <v-container class="letter">
+  <v-container class="letterview">
     <v-layout align-center justify-center wrap>
         <v-flex xs12 sm11 md11 lg8 xl7 class="mb-3">  
             <app-envelope :letter="letter" @click.native="isOpen = !isOpen"></app-envelope> 
         </v-flex>
         <v-flex xs12 sm11 md11 lg8 xl6>  
           <transition name="slide">
-            <app-letter :letter="letter" v-if="isOpen"></app-letter> 
+            <app-letter :letter="letter" v-if="isOpen" id="letter"></app-letter> 
           </transition>
         </v-flex>
       </v-layout>
@@ -53,6 +53,11 @@ export default {
 </script>
 
 <style>
+  #letter {
+    width: 95%;
+    margin:auto;
+  }
+  
   .slide-enter {
     opacity: 0;
   }

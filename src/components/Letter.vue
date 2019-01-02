@@ -19,12 +19,11 @@ export default {
   filters: {
     convertDate(value) {
       let oldDate = new Date(value);
-      let day = oldDate.getDay();
-      let month = oldDate.getMonth();
-      let year = oldDate.getFullYear() + 1;
+      let day = oldDate.getDate();
+      let month = oldDate.getMonth() + 1;
+      let year = oldDate.getFullYear();
       let newDate = day + '.' + month + '.' + year;
       return newDate;
-     /*  return value.toLocaleString('de-DE'); */
     }
   }
 }

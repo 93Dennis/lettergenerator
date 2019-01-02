@@ -18,7 +18,6 @@
       async onSubmit(letter) {  
         try {
           const response = await db.collection('letters').add(letter); 
-          console.log("Die erstellte ID: " + response.id)
           this.$router.push({ name: 'edit', params: { id: response.id, lkey: letter.key } });
         } catch(e) {
           console.log('Fehler beim Senden an Server: ', e);

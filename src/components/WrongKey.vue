@@ -12,7 +12,9 @@
                 <v-icon color="error" large>error_outline</v-icon>
               </v-flex>
               <v-flex xs10 md8>
-                <span class="title">Du hast einen falschen Schlüssel angegeben.</span>
+                <span class="title">
+                  <slot></slot>
+                </span>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -21,3 +23,4 @@
     </v-layout>
   </v-container>
 </template>
+

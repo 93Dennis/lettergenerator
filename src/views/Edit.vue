@@ -41,7 +41,7 @@
       <span slot="button-value">Bearbeiten</span>
     </app-form>
     
-    <app-wrong-key v-if="!authorised"></app-wrong-key>  
+    <app-wrong-key v-if="!authorised">{{ errorMessage }}</app-wrong-key>  
   </div>
 </template>
 
@@ -58,7 +58,8 @@ export default {
       letter: {},
       authorised: false,
       isEditing: false,
-      showSuccessAlert: false
+      showSuccessAlert: false,
+      errorMessage: ''
     }
   },
   props: ['id', 'lkey'],
@@ -82,11 +83,14 @@ export default {
         const doc = await db.collection('letters').doc(this.id);
         const data = await doc.get();
         if (!data.exists) {
+          this.errorMessage = 'Der Brief ist nicht vorhanden.'
           console.log('Das Dokument wurde nicht gefunden!');
+          return false;
         } else {
           return data.data();
         }
       } catch(e) {
+         this.errorMessage = 'Fehler beim Laden der Daten.'
         console.log('Fehler beim Laden der Daten: ', e);
       }
     },
@@ -109,10 +113,15 @@ export default {
   },
   async created() {
     this.letter = await this.getData();
+    if (!this.letter) {
+      this.letter = {};
+      return;
+    }
     if (this.lkey == this.letter.key) {
       this.authorised = true;
     } else {
       this.letter = {}
+      this.errorMessage = 'Du hast einen falschen Schlüssel angegeben.'
       console.log('Zugang verweigert! Schlüssel fehlt.');
     }
   },
