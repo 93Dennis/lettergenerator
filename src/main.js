@@ -3,6 +3,7 @@ import VueClipboard from 'vue-clipboard2'
 import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
+import './registerServiceWorker'
 import store from './store'
 import VueScrollTo from 'vue-scrollto'
 
