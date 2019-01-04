@@ -30,8 +30,7 @@ export default {
   methods: {
     async getData() {
       try{
-        const doc = await db.collection('letters').doc(this.id);
-        const data = await doc.get();
+        const data = await db.collection('letters').doc(this.id).get();
         if (!data.exists) {
           console.log('Das Dokument wurde nicht gefunden!');
         } else {

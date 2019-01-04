@@ -36,14 +36,14 @@
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-flex xs12 sm10>
-                  <h2 class="mt-3">Sendedaten</h2>
+                  <h2 class="mt-3">Absendedaten</h2>
                 </v-flex>
                 <v-flex xs12 sm4 offset-sm1 class="my-3">
-                  <v-text-field prepend-icon="place" clearable name="place" label="Sendeort" type="text" v-model="letter.place"></v-text-field>
+                  <v-text-field prepend-icon="place" clearable name="place" label="Absendeort" type="text" v-model="letter.place"></v-text-field>
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-flex xs12 sm4 class="my-3">
-                  <v-text-field prepend-icon="date_range" name="date" label="Sendedatum" type="date" v-model="letter.date"></v-text-field>
+                  <v-text-field prepend-icon="date_range" name="date" label="Absendedatum" type="date" v-model="letter.date"></v-text-field>
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-flex xs12 sm10>
@@ -100,7 +100,11 @@ export default {
         place: '',
         date: '',
         content: '',
-        key: ''
+        key: '',
+        fontSizeMultiplier: {
+          size: 1,
+          lineHeight: 150
+        }
       }
       
     }
@@ -119,8 +123,8 @@ export default {
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
-        this.lData = this.letter;
-        this.onSubmit(this.lData);
+        this.$emit('lDataChanged', this.letter);
+        this.onSubmit(this.letter);
       }
     }
   },
