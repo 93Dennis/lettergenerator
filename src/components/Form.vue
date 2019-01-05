@@ -104,7 +104,8 @@ export default {
         fontSizeMultiplier: {
           size: 1,
           lineHeight: 150
-        }
+        },
+        background: './1.png'
       }
       
     }
@@ -124,7 +125,8 @@ export default {
     async submit() {
       if (this.$refs.form.validate()) {
         this.$emit('lDataChanged', this.letter);
-        this.onSubmit(this.letter);
+        let message = 'Dein Brief wurde erfolgreich gespeichert!';
+        this.onSubmit(this.letter, message);
       }
     }
   },

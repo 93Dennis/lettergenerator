@@ -1,5 +1,5 @@
 <template>
-  <div class="letter-image" :style="styleOptions">
+  <div class="letter-image" :style="letterStyle">
     <div 
       class="place-date" 
       :style="textStyle"
@@ -13,13 +13,6 @@
 
 <script>
 export default {
-  data () {
-    return {
-      styleOptions: {
-        backgroundImage: 'url(' + require('../assets/images/ricepaper_v3.png') + ')'
-      }
-    }
-  },
   props: ['letter'],
   computed: {
     textStyle() {
@@ -30,6 +23,15 @@ export default {
       } else {
         styleObj.fontSize = this.letter.fontSizeMultiplier.size + 'em';
         styleObj.lineHeight = this.letter.fontSizeMultiplier.lineHeight + '%';
+      }
+      return styleObj;
+    },
+    letterStyle() {
+      let styleObj = {};
+      if (!this.letter.background) {
+        styleObj.backgroundImage = 'url(' + require('../assets/backgrounds/1.png') + ')';
+      } else {
+        styleObj.backgroundImage = 'url(' + require('../assets/backgrounds/' + this.letter.background.substring(2)) + ')';
       }
       return styleObj;
     }

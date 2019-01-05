@@ -4,7 +4,7 @@
       <v-container v-if="showSuccessAlert">
         <v-layout align-center justify-center wrap>
           <v-flex xs12 sm11 lg8 xl6>
-            <v-alert type="success" dismissible v-model="showSuccessAlert" trasition="fade-transition" style="margin-bottom:-20px">Dein Brief wurde erfolgreich geändert!</v-alert>
+            <v-alert type="success" dismissible v-model="showSuccessAlert" trasition="fade-transition" style="margin-bottom:-20px">{{ successMessage }}</v-alert>
           </v-flex>
         </v-layout>
       </v-container>
@@ -24,28 +24,110 @@
                   <app-letter :letter="letter"></app-letter>
                 </v-card-text>
                 <v-card-actions>
-                  <v-layout justify-center align-center wrap class="mb-4">
-                      <v-btn 
-                        class="my-2" 
-                        color="primary" 
-                        @click.prevent="changeFontSize(0.1)" 
-                        :disabled="letter.fontSizeMultiplier > 1.7"
-                      >
-                        Schrift vergrößern
-                      </v-btn>
-                      <v-btn 
-                        class="my-2" 
-                        color="primary" 
-                        @click.prevent="changeFontSize(-0.1)" 
-                        :disabled="letter.fontSizeMultiplier < 0.41"
-                      >
-                        Schrift verkleinern
-                      </v-btn>
-                  </v-layout>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout>
+                  <v-layout wrap>
+                    <v-flex xs12 sm3 class="ma-2">
+                      <v-card>
+                        <v-toolbar dark flat color="secondary" height="40">
+                          <v-toolbar-title class="text-xs-center subheading" style="width:100%">
+                            Schriftgr&ouml;&szlig;e
+                          </v-toolbar-title>
+                        </v-toolbar>
+                        <v-card-actions>
+                          <div class="text-xs-center" style="width:100%">
+                            <v-btn 
+                              icon
+                              class="ma-2 elevation-2" 
+                              color="success"
+                              @click.prevent="changeFontSize(0.1)" 
+                              :disabled="letter.fontSizeMultiplier > 1.7"
+                            >
+                              <v-icon>add</v-icon>
+                            </v-btn>
+                            <v-btn 
+                              icon
+                              class="ma-2 elevation-2" 
+                              color="error" 
+                              @click.prevent="changeFontSize(-0.1)" 
+                              :disabled="letter.fontSizeMultiplier < 0.41"
+                            >
+                              <v-icon>remove</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-card-actions>
+                      </v-card>
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                    <v-flex xs12 sm8 class="ma-2">
+                      <v-card>
+                        <v-toolbar dark flat color="secondary" height="40">
+                          <v-toolbar-title class="text-xs-center subheading" style="width:100%">
+                            Schriftart
+                          </v-toolbar-title>
+                        </v-toolbar>
+                        <v-card-actions>
+                          <div class="text-xs-center" style="width:100%">
+                            
+                          
+                          </div>
+                        </v-card-actions>
+                      </v-card>
+                    </v-flex>
+                  
+                    <v-flex xs12 class="ma-2">
+                      <v-card>
+                        <v-toolbar dark flat color="secondary" height="40">
+                          <v-toolbar-title class="text-xs-center subheading" style="width:100%">
+                            Briefpapier
+                          </v-toolbar-title>
+                        </v-toolbar>
+                        <v-card-actions>
+                          <v-container grid-list-sm fluid class="pa-0">
+                            <v-layout row wrap>
+                              <v-flex
+                                v-for="(bg, key) in backgrounds" 
+                                :key="key"
+                                xs6
+                                sm3
+                                md2
+                                d-flex
+                                class="pa-2"
+                              >
+                                <v-card tile class="d-flex">
+                                  <v-img 
+                                    :src="bg" 
+                                    aspect-ratio="1" 
+                                    :class="[letter.background == key ? 'bg-preview-active' : '', 'grey lighten-2']"
+                                    style="cursor: pointer"
+                                    @click="letter.background = key"
+                                  ></v-img>
+                                </v-card>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                        </v-card-actions>
+                      </v-card>
+                    </v-flex> 
+                    <v-flex sm12 class="ma-4"> 
+                      <div class="text-xs-center" style="width:100%">
+                        <v-btn 
+                          color="success"
+                          @click.prevent="onEditSubmit(letter, 'Deine Briefoptionen wurden erfolgreich gespeichert!')" 
+                        >
+                          <v-icon small>done</v-icon> &nbsp; Speichern
+                        </v-btn>
+                        <v-btn 
+                          color="error" 
+                          @click.prevent="resetOptions" 
+                        >
+                          <v-icon small>close</v-icon> &nbsp; Zur&uuml;cksetzen
+                        </v-btn>
+                      </div>
+                    </v-flex>              
+                </v-layout>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
       </v-container>
     </div>
 
@@ -104,7 +186,11 @@ export default {
       authorised: false,
       isEditing: false,
       showSuccessAlert: false,
-      errorMessage: ''
+      successMessage: '',
+      errorMessage: '',
+      backgrounds: {},
+      firstFontSize: {},
+      firstBackground: './1.png'
     }
   },
   props: ['id', 'lkey'],
@@ -138,15 +224,26 @@ export default {
         console.log('Fehler beim Laden der Daten: ', e);
       }
     },
+    importBackgrounds(r) {
+      let imgs = {};
+      r.keys().forEach(key => (imgs[key] = r(key)));
+      return imgs;
+    },
     onEdit() {
       this.isEditing = true;
       this.$scrollTo('#editform', 800);
     },
-    async onEditSubmit(letter) {
+    resetOptions() {
+      this.letter.fontSizeMultiplier.size = this.firstFontSize.size;
+      this.letter.fontSizeMultiplier.lineHeight = this.firstFontSize.lineHeight;
+      this.letter.background = this.firstBackground;
+    },
+    async onEditSubmit(letter, message) {
       try {
         await db.collection('letters').doc(this.id).set(letter); 
         this.isEditing = false;
         this.showSuccessAlert = true;
+        this.successMessage = message;
         this.$scrollTo('#top', 800);
       } catch(e) {
         console.log('Fehler beim Updaten der Daten: ', e);
@@ -155,11 +252,6 @@ export default {
     async changeFontSize(n) {
       this.letter.fontSizeMultiplier.size += n;
       this.letter.fontSizeMultiplier.lineHeight += n * 30;
-      try {
-        await db.collection('letters').doc(this.id).set(this.letter);
-      } catch(e) {
-        console.log('Fehler beim Updaten der Fontgröße: ', e);
-      }
     }
   },
   components: {
@@ -176,12 +268,25 @@ export default {
     }
     if (this.lkey == this.letter.key) {
       this.authorised = true;
+      this.firstFontSize.size = this.letter.fontSizeMultiplier.size;
+      this.firstFontSize.lineHeight = this.letter.fontSizeMultiplier.lineHeight;
+      this.firstBackground = this.letter.background;
     } else {
       this.letter = {};
       this.errorMessage = 'Du hast einen falschen Schlüssel angegeben.';
       console.log('Zugang verweigert! Schlüssel fehlt.');
     }
+    this.backgrounds = this.importBackgrounds(require.context('../assets/backgrounds/', false, /\.png$/));
   },
 }
 </script>
+
+<style>
+  .bg-preview-active {
+    box-shadow: 0 0 7px 1px #4DBA87;
+    -moz-box-shadow: 0 0 7px 1px #4DBA87;
+    -webkit-box-shadow: 0 0 7px 1px #4DBA87;
+    border: 1px solid #4DBA87;
+  }
+</style>
 
