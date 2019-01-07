@@ -9,7 +9,7 @@
         </v-layout>
       </v-container>
 
-      <app-linkbox :editlink="editPath" :playerlink="playerPath"></app-linkbox>
+      <bm-linkbox :editlink="editPath" :playerlink="playerPath"></bm-linkbox>
       
       <v-container class="letter">
         <v-layout align-center justify-center wrap>
@@ -21,43 +21,13 @@
                   </v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-                  <app-letter :letter="letter"></app-letter>
+                  <bm-letter :letter="letter"></bm-letter>
                 </v-card-text>
+                <v-divider class="my-2"></v-divider>
                 <v-card-actions>
-                  <v-layout wrap>
-                    <v-flex xs12 sm3 class="ma-2">
-                      <v-card>
-                        <v-toolbar dark flat color="secondary" height="40">
-                          <v-toolbar-title class="text-xs-center subheading" style="width:100%">
-                            Schriftgr&ouml;&szlig;e
-                          </v-toolbar-title>
-                        </v-toolbar>
-                        <v-card-actions>
-                          <div class="text-xs-center" style="width:100%">
-                            <v-btn 
-                              icon
-                              class="ma-2 elevation-2" 
-                              color="success"
-                              @click.prevent="changeFontSize(0.1)" 
-                              :disabled="letter.fontSizeMultiplier > 1.7"
-                            >
-                              <v-icon>add</v-icon>
-                            </v-btn>
-                            <v-btn 
-                              icon
-                              class="ma-2 elevation-2" 
-                              color="error" 
-                              @click.prevent="changeFontSize(-0.1)" 
-                              :disabled="letter.fontSizeMultiplier < 0.41"
-                            >
-                              <v-icon>remove</v-icon>
-                            </v-btn>
-                          </div>
-                        </v-card-actions>
-                      </v-card>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex xs12 sm8 class="ma-2">
+                  <v-layout justify-center wrap>
+                    
+                    <v-flex xs12 sm4 class="ma-2">
                       <v-card>
                         <v-toolbar dark flat color="secondary" height="40">
                           <v-toolbar-title class="text-xs-center subheading" style="width:100%">
@@ -65,62 +35,156 @@
                           </v-toolbar-title>
                         </v-toolbar>
                         <v-card-actions>
-                          <div class="text-xs-center" style="width:100%">
-                            
-                          
-                          </div>
+                          <v-list v-if="fonts.length > 0" id="font-list" style="width:100%; padding:0">
+                            <template v-for="(font, index) in fonts" style="cursor: pointer; padding: 5px; width:100%">
+                              <v-list-tile 
+                                :key="font" 
+                                @click="letter.fontFamily = font" 
+                                :class="[letter.fontFamily == font ? 'font-active' : '']"
+                              >
+                                <div style="width:20px">
+                                  <v-icon 
+                                    small 
+                                    v-if="letter.fontFamily == font" 
+                                    style="padding-bottom:3px" 
+                                    color="primary"
+                                  >
+                                    arrow_right
+                                  </v-icon>
+                                  <div v-else style="width:16px; height:16px; display:inline-block"></div>
+                                </div>
+                                <v-list-tile-content>
+                                  {{font}}
+                                </v-list-tile-content>
+                              </v-list-tile>
+                              <v-divider :key="index" v-if="index != fonts.length - 1"></v-divider>
+                            </template>
+                          </v-list>
                         </v-card-actions>
                       </v-card>
                     </v-flex>
-                  
-                    <v-flex xs12 class="ma-2">
-                      <v-card>
-                        <v-toolbar dark flat color="secondary" height="40">
-                          <v-toolbar-title class="text-xs-center subheading" style="width:100%">
-                            Briefpapier
-                          </v-toolbar-title>
-                        </v-toolbar>
-                        <v-card-actions>
-                          <v-container grid-list-sm fluid class="pa-0">
-                            <v-layout row wrap>
-                              <v-flex
-                                v-for="(bg, key) in backgrounds" 
-                                :key="key"
-                                xs6
-                                sm3
-                                md2
-                                d-flex
-                                class="pa-2"
-                              >
-                                <v-card tile class="d-flex">
-                                  <v-img 
-                                    :src="bg" 
-                                    aspect-ratio="1" 
-                                    :class="[letter.background == key ? 'bg-preview-active' : '', 'grey lighten-2']"
-                                    style="cursor: pointer"
-                                    @click="letter.background = key"
-                                  ></v-img>
-                                </v-card>
-                              </v-flex>
-                            </v-layout>
-                          </v-container>
-                        </v-card-actions>
-                      </v-card>
-                    </v-flex> 
-                    <v-flex sm12 class="ma-4"> 
+
+                    
+                    
+                    <v-flex xs12 sm7>
+                      <v-layout wrap>
+                        
+                        <v-flex xs12 sm7 class="ma-2">
+                          <v-card>
+                            <v-toolbar dark flat color="secondary" height="40">
+                              <v-toolbar-title class="text-xs-center subheading" style="width:100%">
+                                Schriftfarbe
+                              </v-toolbar-title>
+                            </v-toolbar>
+                            <v-card-actions>
+                              <div class="text-xs-center" style="width:100%">
+                                <bm-color-picker v-model="letter.fontColor" style="width:100%"></bm-color-picker>
+                              </div>
+                            </v-card-actions>
+                          </v-card>
+                        </v-flex>
+
+                        <v-spacer></v-spacer>
+
+                        <v-flex xs12 sm3 md4 class="ma-2">
+                          <v-card>
+                            <v-toolbar dark flat color="secondary" height="40">
+                              <v-toolbar-title class="text-xs-center subheading" style="width:100%">
+                                Schriftgr&ouml;&szlig;e
+                              </v-toolbar-title>
+                            </v-toolbar>
+                            <v-card-actions>
+                              <div class="text-xs-center" style="width:100%">
+                                <v-btn 
+                                  icon
+                                  class="ma-2 elevation-2" 
+                                  color="success"
+                                  @click.prevent="letter.fontSize += 0.1" 
+                                  :disabled="letter.fontSize > 1.7"
+                                >
+                                  <v-icon>add</v-icon>
+                                </v-btn>
+                                <v-btn 
+                                  icon
+                                  class="ma-2 elevation-2" 
+                                  color="error" 
+                                  @click.prevent="letter.fontSize -= 0.1" 
+                                  :disabled="letter.fontSize < 0.41"
+                                >
+                                  <v-icon>remove</v-icon>
+                                </v-btn>
+                              </div>
+                            </v-card-actions>
+                          </v-card>
+                        </v-flex>
+
+                        <v-flex xs12 class="ma-2">
+                          <v-card>
+                            <v-toolbar dark flat color="secondary" height="40">
+                              <v-toolbar-title class="text-xs-center subheading" style="width:100%">
+                                Briefpapier
+                              </v-toolbar-title>
+                            </v-toolbar>
+                            <v-card-actions>
+                              <v-container grid-list-sm fluid class="pa-0">
+                                <v-layout row wrap>
+                                  <v-flex
+                                    v-for="(bg, key) in backgrounds" 
+                                    :key="key"
+                                    xs6
+                                    sm3
+                                    class="pa-2"
+                                  >
+                                    <v-card tile class="d-flex">
+                                      <v-img 
+                                        :src="bg" 
+                                        aspect-ratio="1" 
+                                        :class="[letter.background == key ? 'bg-preview-active' : '', 'grey lighten-2']"
+                                        style="cursor: pointer"
+                                        @click="letter.background = key"
+                                      ></v-img>
+                                    </v-card>
+                                  </v-flex>
+                                </v-layout>
+                              </v-container>
+                            </v-card-actions>
+                          </v-card>
+                        </v-flex>  
+
+                      </v-layout> 
+                    </v-flex>
+
+                    <v-flex xs12 sm11 class="ma-2">
+                      <bm-edit-form 
+                        :letter="letter"
+                        @valid-changed="console.log($event)"
+                      ></bm-edit-form>
+                    </v-flex>
+
+                  </v-layout>
+                </v-card-actions>
+                <v-divider class="mt-4"></v-divider>
+                <v-card-actions>
+                  <v-layout>
+                    <v-flex sm12 class="ma-3"> 
+                      
                       <div class="text-xs-center" style="width:100%">
                         <v-btn 
                           color="success"
-                          @click.prevent="onEditSubmit(letter, 'Deine Briefoptionen wurden erfolgreich gespeichert!')" 
+                          @click.prevent="onSubmit()" 
+                          class="ma-1"
                         >
                           <v-icon small>done</v-icon> &nbsp; Speichern
                         </v-btn>
+
                         <v-btn 
                           color="error" 
-                          @click.prevent="resetOptions" 
+                          @click.prevent="onReset"
+                          class="ma-1" 
                         >
                           <v-icon small>close</v-icon> &nbsp; Zur&uuml;cksetzen
                         </v-btn>
+
                       </div>
                     </v-flex>              
                 </v-layout>
@@ -131,66 +195,49 @@
       </v-container>
     </div>
 
-    <div id="editform">
-      <v-container class="form" v-if="!isEditing && authorised">
-        <v-layout align-center justify-center wrap>
-          <v-flex xs12 sm11 md11 lg8 xl6>
-            <v-card flat>
-              <v-toolbar dark flat color="secondary">
-                <v-toolbar-title style="width:100%">
-                  <v-layout>
-                    <v-flex>
-                      Briefinhalt bearbeiten
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex xs2 md1 class="pl-4">
-                      <v-icon @click="onEdit">keyboard_arrow_down</v-icon>
-                    </v-flex>
-                  </v-layout>        
-                </v-toolbar-title>
-              </v-toolbar>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-
-      <app-form 
-        :onSubmit="onEditSubmit" 
-        :closeable="true" 
-        :l-data="letter"
-        @close-form="isEditing = false" 
-        @l-data-changed="letter = $event" 
-        id="editform"
-        v-if="isEditing" 
-      >
-        <span slot="title">Briefinhalt bearbeiten</span>
-        <span slot="button-value">Bearbeiten</span>
-      </app-form>
-    </div>
-    
-    <app-wrong-key v-if="!authorised">{{ errorMessage }}</app-wrong-key>  
+    <bm-wrong-key v-if="!authorised">{{ errorMessage }}</bm-wrong-key>  
   </div>
 </template>
 
 <script>
 import { db } from '@/firebase/init'
-import appLinkbox from '@/components/Linkbox.vue'
-import appWrongKey from '@/components/WrongKey.vue'
-import appLetter from '@/components/Letter.vue'
-import appForm from '@/components/Form.vue'
+import bmLinkbox from '@/components/Linkbox.vue'
+import bmWrongKey from '@/components/WrongKey.vue'
+import bmLetter from '@/components/Letter.vue'
+import bmEditForm from '@/components/EditForm.vue'
+import { Chrome } from 'vue-color'
 
 export default {
   data() {
     return {
       letter: {},
       authorised: false,
-      isEditing: false,
       showSuccessAlert: false,
       successMessage: '',
       errorMessage: '',
+      showColorPicker: false,
       backgrounds: {},
-      firstFontSize: {},
-      firstBackground: './1.png'
+      fonts: [
+        'Caveat',
+        'Charm',
+        'Dancing Script',
+        'Gloria Hallelujah',
+        'Gochi Hand',
+        'Great Vibes',
+        'Indie Flower',
+        'Kalam',
+        'Pacifico',
+        'Permanent Marker',
+        'Sacramento',
+        'Satisfy',
+        'Shadows Into Light'
+      ],
+      firstFontSize: 1,
+      firstBackground: '',
+      firstFontFamily: '',
+      firstFontColor: { 
+        rgba: {}
+      }
     }
   },
   props: ['id', 'lkey'],
@@ -229,36 +276,33 @@ export default {
       r.keys().forEach(key => (imgs[key] = r(key)));
       return imgs;
     },
-    onEdit() {
-      this.isEditing = true;
-      this.$scrollTo('#editform', 800);
-    },
-    resetOptions() {
-      this.letter.fontSizeMultiplier.size = this.firstFontSize.size;
-      this.letter.fontSizeMultiplier.lineHeight = this.firstFontSize.lineHeight;
+    onReset() {
+      this.letter.fontSize = this.firstFontSize;
       this.letter.background = this.firstBackground;
+      this.letter.fontFamily = this.firstFontFamily;
+      this.letter.fontColor = { rgba: {} };
+      this.letter.fontColor.rgba.r = this.firstFontColor.rgba.r;
+      this.letter.fontColor.rgba.g = this.firstFontColor.rgba.g;
+      this.letter.fontColor.rgba.b = this.firstFontColor.rgba.b;
+      this.letter.fontColor.rgba.a = this.firstFontColor.rgba.a;
     },
-    async onEditSubmit(letter, message) {
+    async onSubmit() {
       try {
-        await db.collection('letters').doc(this.id).set(letter); 
-        this.isEditing = false;
+        await db.collection('letters').doc(this.id).set(this.letter); 
+        this.successMessage = 'Deine Briefoptionen wurden erfolgreich gespeichert!';
         this.showSuccessAlert = true;
-        this.successMessage = message;
         this.$scrollTo('#top', 800);
       } catch(e) {
         console.log('Fehler beim Updaten der Daten: ', e);
       } 
-    },
-    async changeFontSize(n) {
-      this.letter.fontSizeMultiplier.size += n;
-      this.letter.fontSizeMultiplier.lineHeight += n * 30;
     }
   },
   components: {
-    appLinkbox,
-    appWrongKey,
-    appLetter,
-    appForm
+    bmLinkbox,
+    bmWrongKey,
+    bmLetter,
+    bmEditForm,
+    bmColorPicker: Chrome 
   },
   async created() {
     this.letter = await this.getData();
@@ -268,15 +312,19 @@ export default {
     }
     if (this.lkey == this.letter.key) {
       this.authorised = true;
-      this.firstFontSize.size = this.letter.fontSizeMultiplier.size;
-      this.firstFontSize.lineHeight = this.letter.fontSizeMultiplier.lineHeight;
+      this.backgrounds = this.importBackgrounds(require.context('../assets/backgrounds/', false, /\.png$/));
+      this.firstFontSize = this.letter.fontSize;
+      this.firstFontFamily = this.letter.fontFamily;
+      this.firstFontColor.rgba.r = this.letter.fontColor.rgba.r;
+      this.firstFontColor.rgba.g = this.letter.fontColor.rgba.g;
+      this.firstFontColor.rgba.b = this.letter.fontColor.rgba.b;
+      this.firstFontColor.rgba.a = this.letter.fontColor.rgba.a;
       this.firstBackground = this.letter.background;
     } else {
       this.letter = {};
       this.errorMessage = 'Du hast einen falschen Schlüssel angegeben.';
       console.log('Zugang verweigert! Schlüssel fehlt.');
     }
-    this.backgrounds = this.importBackgrounds(require.context('../assets/backgrounds/', false, /\.png$/));
   },
 }
 </script>
@@ -287,6 +335,13 @@ export default {
     -moz-box-shadow: 0 0 7px 1px #4DBA87;
     -webkit-box-shadow: 0 0 7px 1px #4DBA87;
     border: 1px solid #4DBA87;
+  }
+  .font-active {
+    color: #4DBA87;
+    font-weight: bold;
+  }
+  #font-list {
+    list-style-type: none;
   }
 </style>
 

@@ -1,31 +1,20 @@
 <template id="Home">
-    <div class="home">
-      <app-form :onSubmit="onSubmit">
-        <span slot="title">Erstelle einen Brief</span>
-        <span slot="button-value">Erstellen</span>
-      </app-form>
-    </div>
-    
+    <v-container class="form">
+      <v-layout align-center justify-center wrap>
+        <v-flex xs12 sm11 lg8 xl6>
+          <bm-generator-form></bm-generator-form>
+        </v-flex>
+      </v-layout>
+    </v-container> 
 </template>
 
 
 <script>
-  import { db } from '@/firebase/init'
-  import appForm from '@/components/Form.vue'
+  import bmGeneratorForm from '@/components/GeneratorForm.vue'
 
   export default {
-    methods: {
-      async onSubmit(letter) {  
-        try {
-          const response = await db.collection('letters').add(letter); 
-          this.$router.push({ name: 'edit', params: { id: response.id, lkey: letter.key } });
-        } catch(e) {
-          console.log('Fehler beim Senden an Server: ', e);
-        } 
-      }
-    },
     components: {
-      appForm
+      bmGeneratorForm
     }
   }
 </script>

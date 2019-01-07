@@ -1,6 +1,6 @@
 <template>
-  <div class="envelope">
-    <img :src="backgroundPath" alt="Brief" width="100%">
+  <div class="envelope" :style="envelopeStyle">
+    <img :src="backgroundPath" alt="Briefumschlag" width="100%">
     <div class="sender" v-if="letter.sender">
       {{ letter.sender.name }}<br>
       {{ letter.sender.street }}<br>
@@ -25,7 +25,24 @@ export default {
       backgroundPath: bg
     }
   },
-  props: ['letter']
+  props: ['letter'],
+  computed: {
+    envelopeStyle() {
+      let styleObj = {};
+      styleObj.fontFamily = this.letter.fontFamily;
+      if (!this.letter.fontColor) {
+        styleObj.color = 'rgba(0, 0, 0, 1)';
+      } else {
+        styleObj.color = `rgba(
+          ${this.letter.fontColor.rgba.r}, 
+          ${this.letter.fontColor.rgba.g}, 
+          ${this.letter.fontColor.rgba.b},
+          ${this.letter.fontColor.rgba.a}
+        )`;
+      }
+      return styleObj;
+    }
+  }
 }
 </script>
 
@@ -33,8 +50,6 @@ export default {
   .envelope {
     position: relative;
     text-align: left;
-    color: rgb(7, 8, 87);
-    font-family: 'Dancing Script', cursive;
     white-space: pre-wrap;
     line-height: 100%;
     cursor: pointer;

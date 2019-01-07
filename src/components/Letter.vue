@@ -17,12 +17,10 @@ export default {
   computed: {
     textStyle() {
       let styleObj = {};
-      if (!this.letter.fontSizeMultiplier) {
+      if (!this.letter.fontSize) {
         styleObj.fontSize = '1em';
-        styleObj.lineHeight = '150%';
       } else {
-        styleObj.fontSize = this.letter.fontSizeMultiplier.size + 'em';
-        styleObj.lineHeight = this.letter.fontSizeMultiplier.lineHeight + '%';
+        styleObj.fontSize = this.letter.fontSize + 'em';
       }
       return styleObj;
     },
@@ -32,6 +30,21 @@ export default {
         styleObj.backgroundImage = 'url(' + require('../assets/backgrounds/1.png') + ')';
       } else {
         styleObj.backgroundImage = 'url(' + require('../assets/backgrounds/' + this.letter.background.substring(2)) + ')';
+      }
+      if (!this.letter.fontFamily) {
+        styleObj.fontFamily = 'Dancing Script';
+      } else {
+        styleObj.fontFamily = this.letter.fontFamily;
+      }
+      if (!this.letter.fontColor) {
+        styleObj.color = 'rgba(0, 0, 0, 1)';
+      } else {
+        styleObj.color = `rgba(
+          ${this.letter.fontColor.rgba.r}, 
+          ${this.letter.fontColor.rgba.g}, 
+          ${this.letter.fontColor.rgba.b},
+          ${this.letter.fontColor.rgba.a}
+        )`;
       }
       return styleObj;
     }
@@ -52,8 +65,6 @@ export default {
 <style>
   .letter-image {
     text-align: left;
-    color: rgb(7, 8, 87);
-    font-family: 'Dancing Script', cursive;
     background-repeat: repeat;
     -webkit-filter: drop-shadow(2px 2px 2px #222);
     filter: drop-shadow(2px 2px 2px #222);
@@ -68,6 +79,7 @@ export default {
     height: 90%;
     padding: 7% 8% 10%;
     white-space: pre-wrap;
+    line-height: 1.5;
   }
   
   @media screen and (max-width: 210px) {
