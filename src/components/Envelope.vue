@@ -115,7 +115,7 @@ export default {
     }
   } 
   @media screen and (min-width: 1905px) {
-    .letter-image {
+    .envelope {
       font-size: 1.4em;
     }
   } 

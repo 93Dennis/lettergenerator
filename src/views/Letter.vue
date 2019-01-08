@@ -1,10 +1,10 @@
 <template>
   <v-container class="letterview">
     <v-layout align-center justify-center wrap>
-        <v-flex xs12 sm11 md11 lg8 xl7 class="mb-3">  
-            <app-envelope :letter="letter" @click.native="isOpen = !isOpen"></app-envelope> 
+        <v-flex xs12 sm11 md11 lg8 xl7 class="mb-3" id="envelopeFlex">  
+            <app-envelope :letter="letter" @click.native="onEnvelopeClick"></app-envelope> 
         </v-flex>
-        <v-flex xs12 sm11 md11 lg8 xl6>  
+        <v-flex xs12 sm11 md11 lg8 xl6 id="letterFlex">  
           <transition name="slide">
             <app-letter :letter="letter" v-if="isOpen" id="letter"></app-letter> 
           </transition>
@@ -39,6 +39,15 @@ export default {
       } catch(e) {
         console.log('Fehler beim Laden der Daten: ', e);
       }
+    },
+    onEnvelopeClick() {
+      this.isOpen = !this.isOpen;
+      if (this.isOpen) {
+        this.$scrollTo('#letterFlex', 2000);
+      } else {
+        this.$scrollTo('#envelopeFlex', 2000);
+      }
+      
     }
   },
   components: {
