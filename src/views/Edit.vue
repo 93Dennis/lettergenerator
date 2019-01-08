@@ -1,7 +1,7 @@
 <template>
   <div class="edit" id="top" style="height: 100%">
     <bm-loading v-if="loading"></bm-loading>
-    <bm-wrong-key v-if="authorised === false">{{ errorMessage }}</bm-wrong-key>  
+    <bm-loginbox v-if="authorised === false" :l-key="letter.key" :id="this.id">{{ errorMessage }}</bm-loginbox>  
     
     <div v-if="authorised">
       <v-container v-if="showSuccessAlert">
@@ -197,7 +197,7 @@
       </v-container>
 
       <bm-linkbox :editlink="editPath" :playerlink="playerPath"></bm-linkbox>
-      
+
     </div>
 
   </div>
@@ -207,7 +207,7 @@
 import { db } from '@/firebase/init'
 import bmLoading from '@/components/Loading.vue'
 import bmLinkbox from '@/components/Linkbox.vue'
-import bmWrongKey from '@/components/WrongKey.vue'
+import bmLoginbox from '@/components/Loginbox.vue'
 import bmLetter from '@/components/Letter.vue'
 import bmEditForm from '@/components/EditForm.vue'
 import { Chrome } from 'vue-color'
@@ -306,7 +306,7 @@ export default {
   components: {
     bmLoading,
     bmLinkbox,
-    bmWrongKey,
+    bmLoginbox,
     bmLetter,
     bmEditForm,
     bmColorPicker: Chrome 
@@ -324,7 +324,6 @@ export default {
       this.setInitVars();
     } else {
       this.authorised = false;
-      this.letter = {};
       this.errorMessage = 'Du hast einen falschen Schlüssel angegeben.';
       console.log('Zugang verweigert! Schlüssel fehlt.');
     }
