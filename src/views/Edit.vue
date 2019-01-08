@@ -11,8 +11,6 @@
           </v-flex>
         </v-layout>
       </v-container>
-
-      <bm-linkbox :editlink="editPath" :playerlink="playerPath"></bm-linkbox>
       
       <v-container class="letter">
         <v-layout align-center justify-center wrap>
@@ -197,6 +195,9 @@
           </v-flex>
         </v-layout>
       </v-container>
+
+      <bm-linkbox :editlink="editPath" :playerlink="playerPath"></bm-linkbox>
+      
     </div>
 
   </div>
@@ -210,6 +211,7 @@ import bmWrongKey from '@/components/WrongKey.vue'
 import bmLetter from '@/components/Letter.vue'
 import bmEditForm from '@/components/EditForm.vue'
 import { Chrome } from 'vue-color'
+import { letterObject } from '@/objects/Letter.vue'
 
 export default {
   data() {
@@ -237,12 +239,7 @@ export default {
         'Satisfy',
         'Shadows Into Light'
       ],
-      firstFontSize: 1,
-      firstBackground: '',
-      firstFontFamily: '',
-      firstFontColor: { 
-        rgba: {}
-      }
+      initVars: letterObject
     }
   },
   props: ['id', 'lkey'],
@@ -281,19 +278,23 @@ export default {
       r.keys().forEach(key => (imgs[key] = r(key)));
       return imgs;
     },
+    setInitVars() {
+      for(let key in this.letter) {
+        this.initVars[key] = this.letter[key];
+      }
+    },
     onReset() {
-      this.letter.fontSize = this.firstFontSize;
-      this.letter.background = this.firstBackground;
-      this.letter.fontFamily = this.firstFontFamily;
-      this.letter.fontColor = { rgba: {} };
-      this.letter.fontColor.rgba.r = this.firstFontColor.rgba.r;
-      this.letter.fontColor.rgba.g = this.firstFontColor.rgba.g;
-      this.letter.fontColor.rgba.b = this.firstFontColor.rgba.b;
-      this.letter.fontColor.rgba.a = this.firstFontColor.rgba.a;
+      for(let key in this.initVars) {
+        this.letter[key] = this.initVars[key];
+      }
+      this.successMessage = 'Deine Briefoptionen wurden erfolgreich zurückgesetzt!';
+      this.showSuccessAlert = true;
+      this.$scrollTo('#top', 800);
     },
     async onSubmit() {
       try {
-        await db.collection('letters').doc(this.id).set(this.letter); 
+        await db.collection('letters').doc(this.id).set(this.letter);
+        this.setInitVars();
         this.successMessage = 'Deine Briefoptionen wurden erfolgreich gespeichert!';
         this.showSuccessAlert = true;
         this.$scrollTo('#top', 800);
@@ -320,13 +321,7 @@ export default {
     if (this.lkey == this.letter.key) {
       this.authorised = true;
       this.backgrounds = this.importBackgrounds(require.context('../assets/backgrounds/', false, /\.png$/));
-      this.firstFontSize = this.letter.fontSize;
-      this.firstFontFamily = this.letter.fontFamily;
-      this.firstFontColor.rgba.r = this.letter.fontColor.rgba.r;
-      this.firstFontColor.rgba.g = this.letter.fontColor.rgba.g;
-      this.firstFontColor.rgba.b = this.letter.fontColor.rgba.b;
-      this.firstFontColor.rgba.a = this.letter.fontColor.rgba.a;
-      this.firstBackground = this.letter.background;
+      this.setInitVars();
     } else {
       this.authorised = false;
       this.letter = {};

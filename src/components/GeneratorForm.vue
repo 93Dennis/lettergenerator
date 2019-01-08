@@ -59,11 +59,16 @@
 
 <script>
 import { db } from '@/firebase/init'
-import LetterObject from '@/mixins/LetterObject.vue'
+import { letterObject } from '@/objects/Letter.vue'
 import FormRules from '@/mixins/FormRules.vue'
 
 export default {
-  mixins: [LetterObject, FormRules],
+  data() {
+    return {
+      letterObject
+    }
+  },
+  mixins: [FormRules],
   methods: {
     async onSubmit() {
       if (this.$refs.form.validate()) {
