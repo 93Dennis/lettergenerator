@@ -1,5 +1,8 @@
 <template>
-  <div class="edit" id="top">
+  <div class="edit" id="top" style="height: 100%">
+    <bm-loading v-if="loading"></bm-loading>
+    <bm-wrong-key v-if="authorised === false">{{ errorMessage }}</bm-wrong-key>  
+    
     <div v-if="authorised">
       <v-container v-if="showSuccessAlert">
         <v-layout align-center justify-center wrap>
@@ -132,7 +135,8 @@
                                     v-for="(bg, key) in backgrounds" 
                                     :key="key"
                                     xs6
-                                    sm3
+                                    sm4
+                                    md3
                                     class="pa-2"
                                   >
                                     <v-card tile class="d-flex">
@@ -195,12 +199,12 @@
       </v-container>
     </div>
 
-    <bm-wrong-key v-if="!authorised">{{ errorMessage }}</bm-wrong-key>  
   </div>
 </template>
 
 <script>
 import { db } from '@/firebase/init'
+import bmLoading from '@/components/Loading.vue'
 import bmLinkbox from '@/components/Linkbox.vue'
 import bmWrongKey from '@/components/WrongKey.vue'
 import bmLetter from '@/components/Letter.vue'
@@ -210,8 +214,9 @@ import { Chrome } from 'vue-color'
 export default {
   data() {
     return {
+      loading: true,
+      authorised: null,
       letter: {},
-      authorised: false,
       showSuccessAlert: false,
       successMessage: '',
       errorMessage: '',
@@ -298,6 +303,7 @@ export default {
     }
   },
   components: {
+    bmLoading,
     bmLinkbox,
     bmWrongKey,
     bmLetter,
@@ -306,6 +312,7 @@ export default {
   },
   async created() {
     this.letter = await this.getData();
+    this.loading = false;
     if (!this.letter) {
       this.letter = {};
       return;
@@ -321,6 +328,7 @@ export default {
       this.firstFontColor.rgba.a = this.letter.fontColor.rgba.a;
       this.firstBackground = this.letter.background;
     } else {
+      this.authorised = false;
       this.letter = {};
       this.errorMessage = 'Du hast einen falschen Schlüssel angegeben.';
       console.log('Zugang verweigert! Schlüssel fehlt.');

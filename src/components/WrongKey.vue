@@ -1,8 +1,8 @@
 <template>
-  <v-container class="wrong-key">
-    <v-layout align-center justify-center>
-      <v-flex xs12 sm10 md8>
-        <v-card flat>
+  <v-container fill-height id="wrong-key">
+    <v-layout row wrap align-center justify-center class="mb-5">
+      <v-flex xs12 sm10 md8 class="mb-5">
+        <v-card flat class="mb-5">
           <v-toolbar dark flat color="error">
             <v-toolbar-title>Zugriff verweigert!</v-toolbar-title>
           </v-toolbar>
