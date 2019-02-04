@@ -65,7 +65,7 @@ import FormRules from '@/mixins/FormRules.vue'
 export default {
   data() {
     return {
-      letterObject
+      letter: letterObject
     }
   },
   mixins: [FormRules],
