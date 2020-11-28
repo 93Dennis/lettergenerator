@@ -1,5 +1,6 @@
 .DS_Store
 .firebase
+.history
 node_modules
 /dist
 /src/firebase
